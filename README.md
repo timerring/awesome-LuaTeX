@@ -18,7 +18,8 @@ Utilities for integrating GitHub data into your LaTeX documents.
 **Location**: [`packages/github/`](packages/github/)
 
 **Features**:
-- Real-time GitHub repository metrics fetching
+- 11 different GitHub metrics (repository stars, user total stars, forks, etc.)
+- Real-time data fetching during compilation
 - Uses shields.io API (bypasses GitHub API rate limits)
 - Smart formatting for numeric values
 - Compatible with macOS and Linux
@@ -28,7 +29,8 @@ Utilities for integrating GitHub data into your LaTeX documents.
 
 | Metric | Command | Description |
 |--------|---------|-------------|
-| **Stars** | `\getgithubstars{repo}` | Repository star count |
+| **Repository Stars** | `\getgithubrepostars{repo}` | Repository star count |
+| **User Total Stars** | `\getgithubuserstars{username}` | User's total stars across all repos |
 | **Forks** | `\getgithubforks{repo}` | Number of forks |
 | **Watchers** | `\getgithubwatchers{repo}` | Number of watchers |
 | **Contributors** | `\getgithubcontributors{repo}` | Number of contributors |
@@ -48,9 +50,10 @@ Utilities for integrating GitHub data into your LaTeX documents.
 \directlua{dofile("packages/github/github-all.lua")}
 
 % Use any command
-The Linux kernel has \getgithubstars{torvalds/linux} stars,
+The Linux kernel has \getgithubrepostars{torvalds/linux} stars,
 \getgithubforks{torvalds/linux} forks,
 and is licensed under \getgithublicense{torvalds/linux}.
+Linus Torvalds has \getgithubuserstars{torvalds} total stars.
 
 \end{document}
 ```
@@ -94,7 +97,8 @@ cp -r packages/github /path/to/your/project/
 Then load it in your `.tex` file:
 
 ```latex
-\directlua{dofile("packages/github/github-stars.lua")}
+\directlua{dofile("packages/github/github-repo-stars.lua")}
+\directlua{dofile("packages/github/github-user-stars.lua")}
 ```
 
 ## Documentation
@@ -107,7 +111,7 @@ Then load it in your `.tex` file:
 
 | Package | Description | Documentation |
 |---------|-------------|---------------|
-| **GitHub Metrics** | Fetch GitHub repository data (stars, forks, license, etc.) | [README](packages/github/README.md) |
+| **GitHub Metrics** | Fetch GitHub data (11 metrics: repository stars, user total stars, forks, license, etc.) | [README](packages/github/README.md) |
 
 ## Requirements
 
@@ -139,7 +143,8 @@ awesome-LuaTeX/
     └── github/            # GitHub integration packages
         ├── README.md                # GitHub packages documentation
         ├── github-all.lua           # Load all metrics (recommended)
-        ├── github-stars.lua         # Stars counter
+        ├── github-repo-stars.lua    # Repository stars counter
+        ├── github-user-stars.lua    # User total stars counter
         ├── github-forks.lua         # Forks counter
         ├── github-watchers.lua      # Watchers counter
         ├── github-contributors.lua  # Contributors counter

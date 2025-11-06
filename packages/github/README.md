@@ -6,7 +6,7 @@
 
 ## Overview
 
-The **GitHub Metrics Package** is a comprehensive LuaTeX solution that dynamically fetches and displays GitHub repository data during document compilation. It provides 10 different metrics including stars, forks, watchers, contributors, open issues, license information, release versions, primary language, and creation dates.
+The **GitHub Metrics Package** is a comprehensive LuaTeX solution that dynamically fetches and displays GitHub repository data during document compilation. It provides 11 different metrics including repository stars, user total stars, forks, watchers, contributors, open issues, license information, release versions, primary language, and creation dates.
 
 Perfect for:
 - **Technical Documentation**: Show live project statistics in your documentation
@@ -19,7 +19,7 @@ All metrics are fetched automatically during compilation and formatted for optim
 
 ## Features
 
-- **10 GitHub Metrics**: Stars, forks, watchers, contributors, issues, license, release, tag, language, and creation date
+- **11 GitHub Metrics**: Repository stars, user total stars, forks, watchers, contributors, issues, license, release, tag, language, and creation date
 - **Real-time Data**: Automatically fetch current data during each compilation
 - **No Rate Limits**: Uses shields.io API and GitHub API to bypass authentication requirements
 - **Smart Formatting**: 
@@ -39,7 +39,8 @@ All metrics are fetched automatically during compilation and formatted for optim
 packages/github/
 ├── README.md                   # This documentation
 ├── github-all.lua              # Load all metrics at once (recommended)
-├── github-stars.lua            # Stars counter
+├── github-repo-stars.lua       # Repository stars counter
+├── github-user-stars.lua       # User total stars counter
 ├── github-contributors.lua     # Contributors counter
 ├── github-forks.lua            # Forks counter
 ├── github-watchers.lua         # Watchers counter
@@ -66,7 +67,8 @@ cp packages/github/*.lua /path/to/your/project/
 **Option B**: Copy specific scripts you need
 
 ```bash
-cp packages/github/github-stars.lua /path/to/your/project/
+cp packages/github/github-repo-stars.lua /path/to/your/project/
+cp packages/github/github-user-stars.lua /path/to/your/project/
 cp packages/github/github-forks.lua /path/to/your/project/
 ```
 
@@ -89,9 +91,10 @@ In your LaTeX document:
 \directlua{dofile("packages/github/github-all.lua")}
 
 % Use any command
-The Linux kernel has \getgithubstars{torvalds/linux} stars,
+The Linux kernel has \getgithubrepostars{torvalds/linux} stars,
 \getgithubforks{torvalds/linux} forks,
 and is licensed under \getgithublicense{torvalds/linux}.
+Linus Torvalds has \getgithubuserstars{torvalds} total stars.
 
 \end{document}
 ```
@@ -104,12 +107,14 @@ and is licensed under \getgithublicense{torvalds/linux}.
 \begin{document}
 
 % Load only the metrics you need
-\directlua{dofile("packages/github/github-stars.lua")}
+\directlua{dofile("packages/github/github-repo-stars.lua")}
+\directlua{dofile("packages/github/github-user-stars.lua")}
 \directlua{dofile("packages/github/github-forks.lua")}
 \directlua{dofile("packages/github/github-license.lua")}
 
 % Use the commands
-The Linux kernel has \getgithubstars{torvalds/linux} stars.
+The Linux kernel has \getgithubrepostars{torvalds/linux} stars.
+Linus has \getgithubuserstars{torvalds} total stars.
 
 \end{document}
 ```
@@ -126,7 +131,8 @@ lualatex --shell-escape your-document.tex
 
 | Command | Description | Example Output |
 |---------|-------------|----------------|
-| `\getgithubstars{owner/repo}` | Number of stars | `240k+`, `823` |
+| `\getgithubrepostars{owner/repo}` | Repository star count | `240k+`, `823` |
+| `\getgithubuserstars{username}` | User total stars (all repos) | `4.1k+`, `156` |
 | `\getgithubforks{owner/repo}` | Number of forks | `50k+`, `411` |
 | `\getgithubwatchers{owner/repo}` | Number of watchers | `6.7k+`, `156` |
 | `\getgithubcontributors{owner/repo}` | Number of contributors | `1.2k+`, `411` |
@@ -139,27 +145,40 @@ lualatex --shell-escape your-document.tex
 
 ## Usage Examples
 
-### Example 1: Single Metric
+### Example 1: Repository Stars
 
 ```latex
 \documentclass{article}
 \begin{document}
 
-\directlua{dofile("packages/github/github-stars.lua")}
+\directlua{dofile("packages/github/github-repo-stars.lua")}
 
-React currently has \getgithubstars{facebook/react} stars on GitHub!
+React currently has \getgithubrepostars{facebook/react} stars on GitHub!
 
 \end{document}
 ```
 
-### Example 2: Multiple Metrics
+### Example 2: User Total Stars
+
+```latex
+\documentclass{article}
+\begin{document}
+
+\directlua{dofile("packages/github/github-user-stars.lua")}
+
+Linus Torvalds has received \getgithubuserstars{torvalds} total stars across all repositories!
+
+\end{document}
+```
+
+### Example 3: Multiple Metrics
 
 ```latex
 \documentclass{article}
 \begin{document}
 
 % Load all metrics
-\directlua{dofile("packages/github/github-stars.lua")}
+\directlua{dofile("packages/github/github-repo-stars.lua")}
 \directlua{dofile("packages/github/github-forks.lua")}
 \directlua{dofile("packages/github/github-license.lua")}
 \directlua{dofile("packages/github/github-language.lua")}
@@ -167,7 +186,7 @@ React currently has \getgithubstars{facebook/react} stars on GitHub!
 \section{Vue.js Repository}
 
 \begin{itemize}
-    \item Stars: \getgithubstars{vuejs/vue}
+    \item Stars: \getgithubrepostars{vuejs/vue}
     \item Forks: \getgithubforks{vuejs/vue}
     \item License: \getgithublicense{vuejs/vue}
     \item Language: \getgithublanguage{vuejs/vue}
@@ -176,27 +195,27 @@ React currently has \getgithubstars{facebook/react} stars on GitHub!
 \end{document}
 ```
 
-### Example 3: Comparison Table
+### Example 4: Comparison Table
 
 ```latex
 \begin{tabular}{|l|c|c|c|}
 \hline
 \textbf{Framework} & \textbf{Stars} & \textbf{Forks} & \textbf{Language} \\
 \hline
-React & \getgithubstars{facebook/react} & \getgithubforks{facebook/react} & \getgithublanguage{facebook/react} \\
+React & \getgithubrepostars{facebook/react} & \getgithubforks{facebook/react} & \getgithublanguage{facebook/react} \\
 \hline
-Vue & \getgithubstars{vuejs/vue} & \getgithubforks{vuejs/vue} & \getgithublanguage{vuejs/vue} \\
+Vue & \getgithubrepostars{vuejs/vue} & \getgithubforks{vuejs/vue} & \getgithublanguage{vuejs/vue} \\
 \hline
-Angular & \getgithubstars{angular/angular} & \getgithubforks{angular/angular} & \getgithublanguage{angular/angular} \\
+Angular & \getgithubrepostars{angular/angular} & \getgithubforks{angular/angular} & \getgithublanguage{angular/angular} \\
 \hline
 \end{tabular}
 ```
 
-### Example 4: Complete Repository Profile
+### Example 5: Complete Repository Profile
 
 ```latex
 % Load all scripts
-\directlua{dofile("packages/github/github-stars.lua")}
+\directlua{dofile("packages/github/github-repo-stars.lua")}
 \directlua{dofile("packages/github/github-forks.lua")}
 \directlua{dofile("packages/github/github-contributors.lua")}
 \directlua{dofile("packages/github/github-license.lua")}
@@ -207,7 +226,7 @@ Angular & \getgithubstars{angular/angular} & \getgithubforks{angular/angular} & 
 \section{TensorFlow}
 
 \begin{description}
-    \item[Stars:] \getgithubstars{tensorflow/tensorflow}
+    \item[Stars:] \getgithubrepostars{tensorflow/tensorflow}
     \item[Forks:] \getgithubforks{tensorflow/tensorflow}
     \item[Contributors:] \getgithubcontributors{tensorflow/tensorflow}
     \item[License:] \getgithublicense{tensorflow/tensorflow}
@@ -308,7 +327,8 @@ All commands follow the same pattern:
 
 **Example:**
 ```latex
-\getgithubstars{torvalds/linux}      % Returns: "150k+"
+\getgithubrepostars{torvalds/linux}  % Returns: "150k+"
+\getgithubuserstars{torvalds}        % Returns: "4.1k+"
 \getgithubforks{vuejs/vue}           % Returns: "34k+"
 \getgithublicense{facebook/react}    % Returns: "MIT"
 \getgithublanguage{torvalds/linux}   % Returns: "C"

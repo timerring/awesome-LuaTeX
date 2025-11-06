@@ -35,62 +35,74 @@ This section contains various LuaTeX packages and utilities for enhancing your d
 
 This subsection contains utilities for integrating GitHub data into your LaTeX documents.
 
-\subsubsection{GitHub Stars Fetcher}
+\subsubsection{GitHub Repository Stars}
 
-This package allows you to automatically fetch and display GitHub repository star counts in real-time.
+Get the star count for a specific GitHub repository.
 
 \paragraph{Introduction}
 
-The GitHub Stars Fetcher demonstrates how to use LuaTeX to fetch GitHub repository star counts dynamically during document compilation.
+The GitHub Repository Stars fetcher displays the number of stars a specific repository has received.
 
 \paragraph{Load Lua Script}
 
-First, load the Lua script in your document:
-
 \begin{verbatim}
-\directlua{dofile("packages/github/github-stars.lua")}
+\directlua{dofile("packages/github/github-repo-stars.lua")}
 \end{verbatim}
-
-% Note: We will load all scripts together later in "Other GitHub Metrics" section
-% So we don't load github-stars.lua here to avoid duplicate command definitions
-
 
 \paragraph{How It Works}
 
-This script:
-\begin{enumerate}
-    \item Uses shields.io API to fetch GitHub star count (bypasses GitHub API rate limit)
-    \item Parses SVG response to extract star count
-    \item Formats the output:
-    \begin{itemize}
-        \item $\geq 1000$ stars: displays as "x.xk+"
-        \item $< 1000$ stars: rounds down to nearest 10, displays as "xx+"
-    \end{itemize}
-\end{enumerate}
+This script uses shields.io API to fetch repository star counts and formats them with "+" suffix for abbreviated numbers (e.g., "240k+").
 
 \paragraph{Usage Instructions}
 
-Use the \verb|\getgithubstars{owner/repo}| command in your LaTeX document.
-
-Example:
+Use the \verb|\getgithubrepostars{owner/repo}| command:
 
 \begin{verbatim}
-\getgithubstars{torvalds/linux}
+\getgithubrepostars{facebook/react}
 \end{verbatim}
 
-Compilation command:
-
-\begin{verbatim}
-lualatex --shell-escape your-document.tex
-\end{verbatim}
-
-\textbf{Note:} Compilation requires the \texttt{--shell-escape} option to execute external shell commands.
+\textbf{Note:} Compilation requires the \texttt{--shell-escape} option.
 
 \paragraph{Usage Examples}
 
 \begin{itemize}
-    \item \textbf{Linux Kernel:} \getgithubstars{torvalds/linux} stars
-    \item \textbf{Matchengine Rust:} \getgithubstars{rqzrqh/matchengine_rust} stars
+    \item \textbf{React:} \getgithubrepostars{facebook/react} stars
+    \item \textbf{Linux Kernel:} \getgithubrepostars{torvalds/linux} stars
+\end{itemize}
+
+\subsubsection{GitHub User Total Stars}
+
+Get the total number of stars across all repositories for a GitHub user.
+
+\paragraph{Introduction}
+
+The GitHub User Total Stars fetcher calculates and displays the cumulative stars received across all of a user's repositories.
+
+\paragraph{Load Lua Script}
+
+\begin{verbatim}
+\directlua{dofile("packages/github/github-user-stars.lua")}
+\end{verbatim}
+
+\paragraph{How It Works}
+
+This script uses GitHub README Stats API to aggregate total stars from all user repositories, including public and private contributions.
+
+\paragraph{Usage Instructions}
+
+Use the \verb|\getgithubuserstars{username}| command:
+
+\begin{verbatim}
+\getgithubuserstars{torvalds}
+\end{verbatim}
+
+\textbf{Note:} This fetches total stars from all repositories owned or contributed to by the user.
+
+\paragraph{Usage Examples}
+
+\begin{itemize}
+    \item \textbf{Linus Torvalds:} \getgithubuserstars{torvalds} total stars
+    \item \textbf{timerring:} \getgithubuserstars{timerring} total stars
 \end{itemize}
 
 \subsubsection{GitHub Forks Counter}
@@ -374,9 +386,11 @@ Fetches creation date from GitHub API and formats it as YYYY-MM-DD.
 
 Here's a comprehensive overview using all GitHub metrics:
 
+\paragraph{Repository Metrics}
+
 \begin{itemize}
     \item \textbf{Repository:} facebook/react
-    \item \textbf{Stars:} \getgithubstars{facebook/react}
+    \item \textbf{Repository Stars:} \getgithubrepostars{facebook/react}
     \item \textbf{Forks:} \getgithubforks{facebook/react}
     \item \textbf{Watchers:} \getgithubwatchers{facebook/react}
     \item \textbf{Contributors:} \getgithubcontributors{facebook/react}
@@ -386,6 +400,13 @@ Here's a comprehensive overview using all GitHub metrics:
     \item \textbf{Latest Release:} \getgithubrelease{facebook/react}
     \item \textbf{Latest Tag:} \getgithubtag{facebook/react}
     \item \textbf{Created:} \getgithubcreated{facebook/react}
+\end{itemize}
+
+\paragraph{User Metrics}
+
+\begin{itemize}
+    \item \textbf{User:} torvalds
+    \item \textbf{Total Stars:} \getgithubuserstars{torvalds}
 \end{itemize}
 
 \end{document}
