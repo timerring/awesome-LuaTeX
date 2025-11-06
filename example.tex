@@ -1,0 +1,392 @@
+% GitHub Stars Fetcher Example
+% Compile with: lualatex example.tex
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+% Enable shell escape for curl commands
+% Compile with: lualatex --shell-escape example.tex
+
+% Load all GitHub metrics at the beginning
+\directlua{dofile("packages/github/github-all.lua")}
+
+\begin{document}
+
+\title{Awesome LuaTeX}
+\author{timerring}
+\date{\today}
+\maketitle
+
+% Table of Contents
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+Welcome to Awesome LuaTeX! This document showcases a collection of useful LuaTeX functions and packages that enhance your LaTeX documents with dynamic content and powerful features.
+
+LuaTeX combines the typesetting power of TeX with the flexibility of the Lua programming language, enabling you to create interactive and data-driven documents.
+
+\section{Packages}
+
+This section contains various LuaTeX packages and utilities for enhancing your documents.
+
+\subsection{GitHub}
+
+This subsection contains utilities for integrating GitHub data into your LaTeX documents.
+
+\subsubsection{GitHub Stars Fetcher}
+
+This package allows you to automatically fetch and display GitHub repository star counts in real-time.
+
+\paragraph{Introduction}
+
+The GitHub Stars Fetcher demonstrates how to use LuaTeX to fetch GitHub repository star counts dynamically during document compilation.
+
+\paragraph{Load Lua Script}
+
+First, load the Lua script in your document:
+
+\begin{verbatim}
+\directlua{dofile("packages/github/github-stars.lua")}
+\end{verbatim}
+
+% Note: We will load all scripts together later in "Other GitHub Metrics" section
+% So we don't load github-stars.lua here to avoid duplicate command definitions
+
+
+\paragraph{How It Works}
+
+This script:
+\begin{enumerate}
+    \item Uses shields.io API to fetch GitHub star count (bypasses GitHub API rate limit)
+    \item Parses SVG response to extract star count
+    \item Formats the output:
+    \begin{itemize}
+        \item $\geq 1000$ stars: displays as "x.xk+"
+        \item $< 1000$ stars: rounds down to nearest 10, displays as "xx+"
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{Usage Instructions}
+
+Use the \verb|\getgithubstars{owner/repo}| command in your LaTeX document.
+
+Example:
+
+\begin{verbatim}
+\getgithubstars{torvalds/linux}
+\end{verbatim}
+
+Compilation command:
+
+\begin{verbatim}
+lualatex --shell-escape your-document.tex
+\end{verbatim}
+
+\textbf{Note:} Compilation requires the \texttt{--shell-escape} option to execute external shell commands.
+
+\paragraph{Usage Examples}
+
+\begin{itemize}
+    \item \textbf{Linux Kernel:} \getgithubstars{torvalds/linux} stars
+    \item \textbf{Matchengine Rust:} \getgithubstars{rqzrqh/matchengine_rust} stars
+\end{itemize}
+
+\subsubsection{GitHub Forks Counter}
+
+Get the number of repository forks.
+
+\paragraph{Introduction}
+
+The GitHub Forks Counter fetches the fork count for any public GitHub repository.
+
+\paragraph{Load Lua Script}
+
+Load the script in your document:
+
+\begin{verbatim}
+\directlua{dofile("packages/github/github-forks.lua")}
+\end{verbatim}
+
+\paragraph{How It Works}
+
+This script uses shields.io API to fetch fork counts and displays them in a readable format (e.g., "50k").
+
+\paragraph{Usage Instructions}
+
+Use the \verb|\getgithubforks{owner/repo}| command:
+
+\begin{verbatim}
+\getgithubforks{facebook/react}
+\end{verbatim}
+
+\paragraph{Usage Examples}
+
+\begin{itemize}
+    \item \textbf{React:} \getgithubforks{facebook/react} forks
+    \item \textbf{Vue:} \getgithubforks{vuejs/vue} forks
+\end{itemize}
+
+\subsubsection{GitHub Watchers Counter}
+
+Get the number of repository watchers.
+
+\paragraph{Introduction}
+
+The GitHub Watchers Counter fetches the watcher count for any public GitHub repository.
+
+\paragraph{Load Lua Script}
+
+\begin{verbatim}
+\directlua{dofile("packages/github/github-watchers.lua")}
+\end{verbatim}
+
+\paragraph{How It Works}
+
+Fetches watcher data from shields.io API and formats it appropriately.
+
+\paragraph{Usage Instructions}
+
+\begin{verbatim}
+\getgithubwatchers{owner/repo}
+\end{verbatim}
+
+\paragraph{Usage Examples}
+
+\begin{itemize}
+    \item \textbf{React:} \getgithubwatchers{facebook/react} watchers
+\end{itemize}
+
+\subsubsection{GitHub Contributors Counter}
+
+Get the number of repository contributors.
+
+\paragraph{Introduction}
+
+The GitHub Contributors Counter shows how many people have contributed to a repository.
+
+\paragraph{Load Lua Script}
+
+\begin{verbatim}
+\directlua{dofile("packages/github/github-contributors.lua")}
+\end{verbatim}
+
+\paragraph{How It Works}
+
+Fetches contributor count from shields.io API.
+
+\paragraph{Usage Instructions}
+
+\begin{verbatim}
+\getgithubcontributors{owner/repo}
+\end{verbatim}
+
+\paragraph{Usage Examples}
+
+\begin{itemize}
+    \item \textbf{React:} \getgithubcontributors{facebook/react} contributors
+\end{itemize}
+
+\subsubsection{GitHub Issues Counter}
+
+Get the number of open issues.
+
+\paragraph{Introduction}
+
+The GitHub Issues Counter displays the current number of open issues in a repository.
+
+\paragraph{Load Lua Script}
+
+\begin{verbatim}
+\directlua{dofile("packages/github/github-issues.lua")}
+\end{verbatim}
+
+\paragraph{How It Works}
+
+Fetches open issue count from shields.io API and extracts the number from "XXX open" format.
+
+\paragraph{Usage Instructions}
+
+\begin{verbatim}
+\getgithubissues{owner/repo}
+\end{verbatim}
+
+\paragraph{Usage Examples}
+
+\begin{itemize}
+    \item \textbf{React:} \getgithubissues{facebook/react} open issues
+\end{itemize}
+
+\subsubsection{GitHub License Detector}
+
+Get the repository license type.
+
+\paragraph{Introduction}
+
+The GitHub License Detector identifies the license under which a repository is distributed.
+
+\paragraph{Load Lua Script}
+
+\begin{verbatim}
+\directlua{dofile("packages/github/github-license.lua")}
+\end{verbatim}
+
+\paragraph{How It Works}
+
+Fetches license information from shields.io API and displays the license name (e.g., "MIT", "Apache-2.0").
+
+\paragraph{Usage Instructions}
+
+\begin{verbatim}
+\getgithublicense{owner/repo}
+\end{verbatim}
+
+\paragraph{Usage Examples}
+
+\begin{itemize}
+    \item \textbf{React:} \getgithublicense{facebook/react}
+    \item \textbf{Linux:} \getgithublicense{torvalds/linux}
+\end{itemize}
+
+\subsubsection{GitHub Release Version}
+
+Get the latest release version.
+
+\paragraph{Introduction}
+
+The GitHub Release Version fetcher displays the most recent release tag.
+
+\paragraph{Load Lua Script}
+
+\begin{verbatim}
+\directlua{dofile("packages/github/github-release.lua")}
+\end{verbatim}
+
+\paragraph{How It Works}
+
+Fetches the latest release version from shields.io API (e.g., "v19.2.0").
+
+\paragraph{Usage Instructions}
+
+\begin{verbatim}
+\getgithubrelease{owner/repo}
+\end{verbatim}
+
+\paragraph{Usage Examples}
+
+\begin{itemize}
+    \item \textbf{React:} \getgithubrelease{facebook/react}
+\end{itemize}
+
+\subsubsection{GitHub Tag Version}
+
+Get the latest tag.
+
+\paragraph{Introduction}
+
+The GitHub Tag Version fetcher displays the most recent tag.
+
+\paragraph{Load Lua Script}
+
+\begin{verbatim}
+\directlua{dofile("packages/github/github-tag.lua")}
+\end{verbatim}
+
+\paragraph{How It Works}
+
+Fetches the latest tag from shields.io API.
+
+\paragraph{Usage Instructions}
+
+\begin{verbatim}
+\getgithubtag{owner/repo}
+\end{verbatim}
+
+\paragraph{Usage Examples}
+
+\begin{itemize}
+    \item \textbf{React:} \getgithubtag{facebook/react}
+\end{itemize}
+
+\subsubsection{GitHub Language Detector}
+
+Get the primary programming language.
+
+\paragraph{Introduction}
+
+The GitHub Language Detector identifies the main programming language used in a repository.
+
+\paragraph{Load Lua Script}
+
+\begin{verbatim}
+\directlua{dofile("packages/github/github-language.lua")}
+\end{verbatim}
+
+\paragraph{How It Works}
+
+Fetches language data from shields.io API and automatically capitalizes common language names (JavaScript, TypeScript, Python, etc.).
+
+\paragraph{Usage Instructions}
+
+\begin{verbatim}
+\getgithublanguage{owner/repo}
+\end{verbatim}
+
+\paragraph{Usage Examples}
+
+\begin{itemize}
+    \item \textbf{React:} \getgithublanguage{facebook/react}
+    \item \textbf{Linux:} \getgithublanguage{torvalds/linux}
+\end{itemize}
+
+\subsubsection{GitHub Creation Date}
+
+Get the repository creation date.
+
+\paragraph{Introduction}
+
+The GitHub Creation Date fetcher displays when a repository was created.
+
+\paragraph{Load Lua Script}
+
+\begin{verbatim}
+\directlua{dofile("packages/github/github-created.lua")}
+\end{verbatim}
+
+\paragraph{How It Works}
+
+Fetches creation date from GitHub API and formats it as YYYY-MM-DD.
+
+\paragraph{Usage Instructions}
+
+\begin{verbatim}
+\getgithubcreated{owner/repo}
+\end{verbatim}
+
+\paragraph{Usage Examples}
+
+\begin{itemize}
+    \item \textbf{React:} Created on \getgithubcreated{facebook/react}
+\end{itemize}
+
+\subsubsection{Complete Example}
+
+Here's a comprehensive overview using all GitHub metrics:
+
+\begin{itemize}
+    \item \textbf{Repository:} facebook/react
+    \item \textbf{Stars:} \getgithubstars{facebook/react}
+    \item \textbf{Forks:} \getgithubforks{facebook/react}
+    \item \textbf{Watchers:} \getgithubwatchers{facebook/react}
+    \item \textbf{Contributors:} \getgithubcontributors{facebook/react}
+    \item \textbf{Open Issues:} \getgithubissues{facebook/react}
+    \item \textbf{License:} \getgithublicense{facebook/react}
+    \item \textbf{Language:} \getgithublanguage{facebook/react}
+    \item \textbf{Latest Release:} \getgithubrelease{facebook/react}
+    \item \textbf{Latest Tag:} \getgithubtag{facebook/react}
+    \item \textbf{Created:} \getgithubcreated{facebook/react}
+\end{itemize}
+
+\end{document}
+
